@@ -1,2 +1,5 @@
-build/
-node_modules/
+/node_modules
+/_build
+/deps
+/priv/static
+/config/prod.secret.exs
