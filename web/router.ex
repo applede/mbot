@@ -13,10 +13,22 @@ defmodule MithrilBot.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :guest do
+    plug :accepts, ["json"]
+    plug Plug.Parsers, parsers: [:json],
+                       pass: ["application/json"],
+                       json_decoder: Poison
+  end
+
   scope "/", MithrilBot do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+  end
+
+  scope "/login", MithrilBot do
+    pipe_through :guest
+    post "/", LoginController, :login_user
   end
 
   # Other scopes may use custom stacks.
