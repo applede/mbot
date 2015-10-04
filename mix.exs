@@ -35,6 +35,6 @@ defmodule MithrilBot.Mixfile do
      {:phoenix_html, "~> 2.1"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:cowboy, "~> 1.0"},
-     {:guardian, "~> 0.6.2"}]
+     {:joken, "~> 0.16.0"}]
   end
 end

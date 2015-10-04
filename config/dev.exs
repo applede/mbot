@@ -41,9 +41,6 @@ config :mithril_bot, MithrilBot.Repo,
   hostname: "localhost",
   pool_size: 10
 
-config :guardian, Guardian,
-  secret_key: "djkfjdkfjkajdkajfkdjiDFJWTPRTIBVPNIQuqwuiquesbcxz"
-
 config :login,
   username: "user",
   password: "password"
