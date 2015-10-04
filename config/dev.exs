@@ -44,3 +44,6 @@ config :mithril_bot, MithrilBot.Repo,
 config :login,
   username: "user",
   password: "password"
+
+config :joken,
+  secret: "jdsjljakjkajfaklhakhfkahfiwuerioquoznvzv.z"
