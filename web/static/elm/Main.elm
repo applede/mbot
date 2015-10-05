@@ -1,6 +1,6 @@
--- declares that this is the SignupForm module, which is how
+-- declares that this is the LoginForm module, which is how
 -- other modules will reference this one if they want to import it and reuse its code.
-module SignupForm where
+module LoginForm where
 
 import StartApp
 import Effects
@@ -31,8 +31,8 @@ type alias Model =
   }
 
 type alias Errors =
-  { username: String
-  , password: String
+  { username: Bool
+  , password: Bool
   , error: String
   }
 
@@ -43,12 +43,19 @@ type alias Action =
   }
 
 
+validationClass err =
+  if err then
+    class "form-group has-error"
+  else
+    class "form-group"
+
+
 view actionDispatcher model =
   div [ class "row" ]
   [ div [ class "panel panel-default col-sm-4 col-sm-offset-4"]
     [ div [class "panel-body"]
       [ form [ id "signup-form", class "form-horizontal" ]
-        [ div [ class "form-group" ]
+        [ div [ validationClass model.errors.username ]
           [ label [ for "username-field", class "control-label col-sm-3" ] [ text "Username" ]
           , div [ class "col-sm-9"]
             [ input
@@ -61,8 +68,7 @@ view actionDispatcher model =
               []
             ]
           ]
-        , div [ class "form-group" ] [ text model.errors.username ]
-        , div [ class "form-group" ]
+        , div [ validationClass model.errors.password ]
           [ label [ for "password-field", class "control-label col-sm-3" ] [ text "Password" ]
           , div [ class "col-sm-9" ]
             [ input
@@ -75,7 +81,6 @@ view actionDispatcher model =
               []
             ]
           ]
-        , div [ class "form-group" ] [ text model.errors.password ]
         , div [ class "form-group" ]
           [ div [ class "col-sm-offset-3 col-sm-9" ]
             [ div [ class "btn btn-primary", onClick actionDispatcher { actionType = "VALIDATE", payload = "" } ] [ text "Login" ]
@@ -93,21 +98,13 @@ viewUsernameErrors model =
    if model.errors.error /= "" then
        model.errors.error
    else
-       model.errors.username
+       ""
 
 
 getErrors : Model -> Errors
 getErrors model =
-    { username =
-        if model.username == "" then
-            "Please enter a username!"
-        else
-            ""
-    , password =
-        if model.password == "" then
-            "Please enter a password!"
-        else
-            ""
+    { username = model.username == ""
+    , password = model.password == ""
     , error = model.errors.error
     }
 
@@ -154,7 +151,7 @@ update action model =
           , map loginError ("error" := string)
           ]
 
-      requestError = \err ->
+      requestError err =
         err |> toString |> loginError |> Task.succeed
 
       request =
@@ -180,7 +177,7 @@ initialModel = { username = "", password = "", errors = initialErrors }
 
 
 initialErrors =
-  { username = "", password = "", error = "" }
+  { username = False, password = False, error = "" }
 
 
 app =
